@@ -6,19 +6,19 @@ int main() {
     const int Min = 5; 
 
     //product A
-    char product_A_name = 'A';
-    double product_A_price = 1.0;
-    int product_A_quantity = 10;
+    char productAname = 'A';
+    double productAprice = 1.0;
+    int productAquantity = 10;
 
     //product B
-    char product_B_name = 'B';
-    double product_B_price = 2.0;
-    int product_B_quantity = 10;
+    char productBname = 'B';
+    double productBprice = 2.0;
+    int productBquantity = 10;
 
     //product c
-    char product_C_name = 'C';
-    double product_C_price = 3.0;
-    int product_C_quantity = 10;
+    char productCname = 'C';
+    double productCprice = 3.0;
+    int productCquantity = 10;
     
     while (1) {
         int choice;
@@ -33,12 +33,12 @@ int main() {
             case 1: // purchase item
                 printf("\nAvailable products:\n");
                 printf("%-8s%-8s%-8s\n", "ID", "Name", "Price");
-                printf("%-8d%-8c%.2lf\n", 1, product_A_name, product_A_price);
-                printf("%-8d%-8c%.2lf\n", 2, product_B_name, product_B_price);
-                printf("%-8d%-8c%.2lf\n", 3, product_C_name, product_C_price);
+                printf("%-8d%-8c%.2lf\n", 1, productAname, productAprice);
+                printf("%-8d%-8c%.2lf\n", 2, productBname, productBprice);
+                printf("%-8d%-8c%.2lf\n", 3, productCname, productCprice);
 
                 int selection;
-                printf("Enter the ID of the item you want to purchase (press 0 to cancel): ");
+                printf("Enter the ID of the item that you want to purchase (press 0 to cancel): ");
                 scanf("%d", &selection);
 
                 if (selection == 0) {
@@ -52,19 +52,19 @@ int main() {
 
                 switch (selection) {
                     case 1:
-                        price = product_A_price;
-                        quantity = &product_A_quantity;
+                        price = productAprice;
+                        quantity = &productAquantity;
                         name = product_A_name;
                         break;
                     case 2:
-                        price = product_B_price;
-                        quantity = &product_B_quantity;
-                        name = product_B_name;
+                        price = productBprice;
+                        quantity = &productBquantity;
+                        name = productBname;
                         break;
                     case 3:
-                        price = product_C_price;
-                        quantity = &product_C_quantity;
-                        name = product_C_name;
+                        price = productCprice;
+                        quantity = &productCquantity;
+                        name = productCname;
                         break;
                     default:
                         printf("Invalid selection please try again.\n");
