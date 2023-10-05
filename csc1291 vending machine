@@ -1,0 +1,119 @@
+#include <stdio.h>
+
+int main() {
+    int password = 9876; 
+    double total_amount = 0.0; 
+    const int Min = 5; 
+
+    //product A
+    char product_A_name = 'A';
+    double product_A_price = 1.0;
+    int product_A_quantity = 10;
+
+    //product B
+    char product_B_name = 'B';
+    double product_B_price = 2.0;
+    int product_B_quantity = 10;
+
+    //product c
+    char product_C_name = 'C';
+    double product_C_price = 3.0;
+    int product_C_quantity = 10;
+    
+    while (1) {
+        int choice;
+        printf("\nVending Machine Menu:\n");
+        printf("1. Purchase item\n");
+        printf("2. Admin mode\n");
+        printf("3. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+        
+        switch (choice) {
+            case 1: // purchase item
+                printf("\nAvailable products:\n");
+                printf("%-8s%-8s%-8s\n", "ID", "Name", "Price");
+                printf("%-8d%-8c%.2lf\n", 1, product_A_name, product_A_price);
+                printf("%-8d%-8c%.2lf\n", 2, product_B_name, product_B_price);
+                printf("%-8d%-8c%.2lf\n", 3, product_C_name, product_C_price);
+
+                int selection;
+                printf("Enter the ID of the item you want to purchase (press 0 to cancel): ");
+                scanf("%d", &selection);
+
+                if (selection == 0) {
+                    printf("Purchase canceled.\n");
+                    break;
+                }
+
+                double price;
+                int* quantity;
+                char name;
+
+                switch (selection) {
+                    case 1:
+                        price = product_A_price;
+                        quantity = &product_A_quantity;
+                        name = product_A_name;
+                        break;
+                    case 2:
+                        price = product_B_price;
+                        quantity = &product_B_quantity;
+                        name = product_B_name;
+                        break;
+                    case 3:
+                        price = product_C_price;
+                        quantity = &product_C_quantity;
+                        name = product_C_name;
+                        break;
+                    default:
+                        printf("Invalid selection please try again.\n");
+                        continue;
+                }
+
+                if (*quantity <= 0) {
+                    printf("Sorry the item you have selected is sold out.\n");
+                    break;
+                }
+
+                printf("\nConfirm Purchase:\n");
+                printf("Item: %c\n", name);
+                printf("Price: %.2lf\n", price);
+                printf("Do you want to confirm this purchase? (press 1 for Yes, 0 for No): ");
+
+                int confirm;
+                scanf("%d", &confirm);
+
+                if (confirm == 1) {
+                    double paid = 0.0;
+
+                    while (paid < price) {
+                        double coin;
+                        printf("Insert coin (1.00, 0.50, 0.25): ");
+                        scanf("%lf", &coin);
+
+                        if (coin == 1.00 || coin == 0.50 || coin == 0.25) {
+                            paid += coin;
+                        } else {
+                            printf("Invalid coin. Do you want to cancel the purchase? (1 for Yes, 0 for No): ");
+                            int cancel;
+                            scanf("%d", &cancel);
+
+                            if (cancel == 1) {
+                                printf("Purchase canceled.\n");
+                                break;
+                            }
+                        }
+                    }
+
+                    if (paid >= price) {
+                        total_amount += price;
+                        (*quantity)--;
+                        printf("\nYou purchased item %c for %.2lf.\n", name, price);
+
+                        if (*quantity <= Min) {
+                            printf("Alert: item %c is running low.\n", name);
+                        }
+                    }
+                }
+                break;
