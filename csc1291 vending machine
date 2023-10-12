@@ -2,7 +2,7 @@
 
 int main() {
     int password = 9876; 
-    double total_amount = 0.0; 
+    double total_amount = 0.0;
     const int Min = 5; 
 
     //product A
