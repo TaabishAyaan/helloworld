@@ -1,0 +1,304 @@
+#include <stdio.h>
+#include <string.h>
+
+// Define symbolic constants
+#define numOfSubjects 5
+#define numOfStudents 10
+
+// Struct to represent student records
+struct Student {
+    char FirstName[50];
+    char LastName[50];
+    int StudentID;
+    float SubjectMarks[numOfSubjects];
+    int AggregateMarks;
+    char Grade[10];
+};
+
+// Subject names
+const char* subjectNames[numOfSubjects] = {
+    "Math",
+    "Science",
+    "History",
+    "English",
+    "Physical Education"
+};
+
+// Function to calculate grade based on marks
+void calculateGrade(float marks, char *grade) {
+    if (marks >= 85) {
+        strcpy(grade, "HD");
+    } else if (marks >= 75) {
+        strcpy(grade, "D");
+    } else if (marks >= 65) {
+        strcpy(grade, "C");
+    } else if (marks >= 50) {
+        strcpy(grade, "P");
+    } else if (marks >= 0) {
+        strcpy(grade, "F");
+    } else {
+        strcpy(grade, "undefined");
+    }
+}
+
+// Function to enroll a student
+void enrol(struct Student students[]) {
+    int studentID;
+    printf("Enter Student ID: ");
+    scanf("%d", &studentID);
+
+    for (int i = 0; i < numOfStudents; i++) {
+        if (students[i].StudentID == studentID) {
+            printf("Student with ID %d already exists. Updating information.\n", studentID);
+
+            // Input subject marks
+            for (int j = 0; j < numOfSubjects; j++) {
+                char choice;
+                printf("Enter %s marks (or 'N' for No): ", subjectNames[j]);
+                scanf(" %c", &choice);
+
+                if (choice == 'N' || choice == 'n') {
+                    students[i].SubjectMarks[j] = -1;
+                } else {
+                    printf("Enter marks for %s: ", subjectNames[j]);
+                    scanf("%f", &students[i].SubjectMarks[j]);
+                }
+            }
+
+            // Calculate AggregateMarks
+            students[i].AggregateMarks = 0;
+            for (int j = 0; j < numOfSubjects; j++) {
+                if (students[i].SubjectMarks[j] != -1) {
+                    students[i].AggregateMarks += students[i].SubjectMarks[j];
+                }
+            }
+
+            // Calculate Grade
+            calculateGrade(students[i].AggregateMarks, students[i].Grade);
+            return;
+        }
+    }
+
+    printf("Student with ID %d not found. Creating a new student.\n", studentID);
+
+    // Find an empty slot for the new student
+    for (int i = 0; i < numOfStudents; i++) {
+        if (students[i].StudentID == 0) {
+            students[i].StudentID = studentID;
+
+            printf("Enter First Name: ");
+            scanf("%s", students[i].FirstName);
+
+            printf("Enter Last Name: ");
+            scanf("%s", students[i].LastName);
+
+            // Input subject marks
+            for (int j = 0; j < numOfSubjects; j++) {
+                char choice;
+                printf("Enter %s marks (or 'N' for No): ", subjectNames[j]);
+                scanf(" %c", &choice);
+
+                if (choice == 'N' || choice == 'n') {
+                    students[i].SubjectMarks[j] = -1;
+                } else {
+                    printf("Enter marks for %s: ", subjectNames[j]);
+                    scanf("%f", &students[i].SubjectMarks[j]);
+                }
+            }
+
+            // Calculate AggregateMarks
+            students[i].AggregateMarks = 0;
+            for (int j = 0; j < numOfSubjects; j++) {
+                if (students[i].SubjectMarks[j] != -1) {
+                    students[i].AggregateMarks += students[i].SubjectMarks[j];
+                }
+            }
+
+            // Calculate Grade
+            calculateGrade(students[i].AggregateMarks, students[i].Grade);
+            return;
+        }
+    }
+
+    printf("No empty slots available for new students.\n");
+}
+// Function to search and update a student
+void searchUpdate(struct Student students[]) {
+    char searchChoice;
+    printf("Search by (S) StudentID or (L) LastName: ");
+    scanf(" %c", &searchChoice);
+
+    if (searchChoice == 'S' || searchChoice == 's') {
+        int studentID;
+        printf("Enter Student ID: ");
+        scanf("%d", &studentID);
+
+        for (int i = 0; i < numOfStudents; i++) {
+            if (students[i].StudentID == studentID) {
+                printf("Student Found:\n");
+                printf("First Name: %s\n", students[i].FirstName);
+                printf("Last Name: %s\n", students[i].LastName);
+                printf("Student ID: %d\n", students[i].StudentID);
+                printf("Aggregate Marks: %d\n", students[i].AggregateMarks);
+                printf("Grade: %s\n", students[i].Grade);
+
+                char updateChoice;
+                printf("Do you want to update student information (Y/N)? ");
+                scanf(" %c", &updateChoice);
+
+                if (updateChoice == 'Y' || updateChoice == 'y') {
+                    printf("Enter updated information:\n");
+                    printf("Enter First Name: ");
+                    scanf("%s", students[i].FirstName);
+
+                    printf("Enter Last Name: ");
+                    scanf("%s", students[i].LastName);
+
+                    // Input subject marks
+                    for (int j = 0; j < numOfSubjects; j++) {
+                        char choice;
+                        printf("Enter updated Subject %d marks (or 'N' for No): ", j);
+                        scanf(" %c", &choice);
+
+                        if (choice == 'N' || choice == 'n') {
+                            students[i].SubjectMarks[j] = -1;
+                        } else {
+                            printf("Enter updated marks: ");
+                            scanf("%f", &students[i].SubjectMarks[j]);
+                        }
+                    }
+
+                    // Calculate AggregateMarks
+                    students[i].AggregateMarks = 0;
+                    for (int j = 0; j < numOfSubjects; j++) {
+                        if (students[i].SubjectMarks[j] != -1) {
+                            students[i].AggregateMarks += students[i].SubjectMarks[j];
+                        }
+                    }
+
+                    // Calculate Grade
+                    calculateGrade(students[i].AggregateMarks, students[i].Grade);
+                }
+                return;
+            }
+        }
+        printf("Student with ID %d not found.\n");
+    } else if (searchChoice == 'L' || searchChoice == 'l') {
+        char lastName[50];
+        printf("Enter Last Name: ");
+        scanf("%s", lastName);
+
+        for (int i = 0; i < numOfStudents; i++) {
+            if (strcasecmp(students[i].LastName, lastName) == 0) {
+                printf("Student Found:\n");
+                printf("First Name: %s\n", students[i].FirstName);
+                printf("Last Name: %s\n", students[i].LastName);
+                printf("Student ID: %d\n", students[i].StudentID);
+                printf("Aggregate Marks: %d\n", students[i].AggregateMarks);
+                printf("Grade: %s\n", students[i].Grade);
+
+                char updateChoice;
+                printf("Do you want to update student information (Y/N)? ");
+                scanf(" %c", &updateChoice);
+
+                if (updateChoice == 'Y' || updateChoice == 'y') {
+                    printf("Enter updated information:\n");
+                    printf("Enter First Name: ");
+                    scanf("%s", students[i].FirstName);
+
+                    printf("Enter Last Name: ");
+                    scanf("%s", students[i].LastName);
+
+                    // Input subject marks
+                    for (int j = 0; j < numOfSubjects; j++) {
+                        char choice;
+                        printf("Enter updated Subject %d marks (or 'N' for No): ", j);
+                        scanf(" %c", &choice);
+
+                        if (choice == 'N' || choice == 'n') {
+                            students[i].SubjectMarks[j] = -1;
+                        } else {
+                            printf("Enter updated marks: ");
+                            scanf("%f", &students[i].SubjectMarks[j]);
+                        }
+                    }
+
+                    // Calculate AggregateMarks
+                    students[i].AggregateMarks = 0;
+                    for (int j = 0; j < numOfSubjects; j++) {
+                        if (students[i].SubjectMarks[j] != -1) {
+                            students[i].AggregateMarks += students[i].SubjectMarks[j];
+                        }
+                    }
+
+                    // Calculate Grade
+                    calculateGrade(students[i].AggregateMarks, students[i].Grade);
+                }
+                return;
+            }
+        }
+        printf("Student with Last Name \"%s\" not found.\n", lastName);
+    } else {
+        printf("Invalid choice for search. Use (S) for StudentID or (L) for LastName.\n");
+    }
+}
+
+// Function to find and print top students
+void topStudents(struct Student students[]) {
+    int highestAggregate = -1;
+    for (int i = 0; i < numOfStudents; i++) {
+        if (students[i].AggregateMarks > highestAggregate) {
+            highestAggregate = students[i].AggregateMarks;
+        }
+    }
+
+    if (highestAggregate == -1) {
+        printf("No students found.\n");
+        return;
+    }
+
+    printf("Top Students (Aggregate Marks >= %d):\n", highestAggregate);
+    for (int i = 0; i < numOfStudents; i++) {
+        if (students[i].AggregateMarks == highestAggregate) {
+            printf("First Name: %s\n", students[i].FirstName);
+            printf("Last Name: %s\n", students[i].LastName);
+            printf("Student ID: %d\n", students[i].StudentID);
+            printf("Aggregate Marks: %d\n", students[i].AggregateMarks);
+            printf("Grade: %s\n\n");
+        }
+    }
+}
+
+int main() {
+    struct Student students[numOfStudents] = {0}; // Initialize all students' IDs to 0
+
+    int choice;
+    while (1) {
+        printf("\nMenu:\n");
+        printf("1. Enrol a student\n");
+        printf("2. Search and update a student\n");
+        printf("3. Find top students\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                enrol(students);
+                break;
+            case 2:
+                searchUpdate(students);
+                break;
+            case 3:
+                topStudents(students);
+                break;
+            case 4:
+                printf("Exiting the program.\n");
+                return 0;
+            default:
+                printf("Invalid choice. Please select a valid option.\n");
+        }
+    }
+
+    return 0;
+}
